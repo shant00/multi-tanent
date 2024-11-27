@@ -1,0 +1,8 @@
+NODE_ENV=development
+PORT=4000
+BCRYPT_SALT_ROUNDS=10
+JWT_SECRET=secret
+JWT_EXPIRES_IN=1d
+JWT_REFRESH_SECRET=refresh_secret 
+JWT_REFRESH_EXPIRES_IN=7d
+DATABASE_URL=postgres://username:password@localhost:5432/schemaName

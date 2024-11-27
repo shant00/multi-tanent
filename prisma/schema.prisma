@@ -1,0 +1,31 @@
+// /src/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Assuming PostgreSQL, adjust if needed
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int            @id @default(autoincrement())
+  email            String         @unique
+  name             String 
+  image            String
+  gender           Gender
+  password         String
+  role             Role
+ 
+}
+enum Role {
+  ADMIN
+  TRAINER
+  TRAINEE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
