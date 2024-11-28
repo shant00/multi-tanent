@@ -1,7 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import httpStatus from 'http-status';
 import { ENUM_USER_ROLE } from '../../../enums/user';
-import ApiError from '../../../errors/ApiError';
 import { makeHashPassword } from '../../../shared/hashPassword';
 import { IUser } from './user.interface';
 
@@ -13,38 +11,35 @@ const registerUser = async (data: IUser) => {
     where: { email: data.email },
   });
   if (findUser) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'User already exists with this email');
+    throw new Error('User already exists with this email');
   }
+
+  const schemaName = data.name.replace(/[^a-zA-Z0-9_]/g, '_');
+
   const user = await prisma.user.create({
     data: {
       name: data.name,
-      image: data.image,
-      gender: data.gender,
       email: data.email,
       password: hashedPassword,
-      role: ENUM_USER_ROLE.TRAINEE,
+      role: ENUM_USER_ROLE.ADMIN,
+      schema: schemaName
     },
   });
 
+
   return user;
 };
-
 const updateUser = async (data: IUser) => {
   const user = await prisma.user.update({
     where: { id: data.id },
     data: {
       name: data.name,
-      image: data.image,
-      gender: data.gender,
       email: data.email,
-      // password: hashedPassword,
-      role: ENUM_USER_ROLE.TRAINEE,
+      role: ENUM_USER_ROLE.ADMIN,
     }
   })
   return user;
 }
-
-
 
 export const UserService = {
   registerUser,

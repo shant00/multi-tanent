@@ -3,14 +3,10 @@ import { dbConnect, dbDisconnect } from "../../../utils/dbConnect";
 import { Field } from "./schema.constant";
 
 const createNewSchema = async (username: string, fields: Field[]) => {
-  console.log("object");
   const client = await dbConnect();
-  console.log(client);
   if (!client) {
     throw new Error("Failed to connect to the database");
   }
-
-
   const queryText = `CREATE SCHEMA IF NOT EXISTS ${username};`;
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS ${username}.resume (
@@ -42,7 +38,7 @@ const createNewSchema = async (username: string, fields: Field[]) => {
     await client.query("ROLLBACK");
     throw new ApiError(500, `Error creating schema: ${(error as Error)?.message}`);
   } finally {
-    dbDisconnect(client);
+    dbDisconnect();
   }
 };
 

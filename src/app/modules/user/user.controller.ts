@@ -18,7 +18,6 @@ const registerUser = catchAsync(async (req: Request, res: Response) => {
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const user: IUser = await UserService.updateUser(req.body);
 
-
   sendResponse<IUser>(res, {
     statusCode: 200,
     success: true,

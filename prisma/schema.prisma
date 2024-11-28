@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // Assuming PostgreSQL, adjust if needed
+  provider = "postgresql" 
   url      = env("DATABASE_URL")
 }
 
@@ -12,16 +12,15 @@ model User {
   id               Int            @id @default(autoincrement())
   email            String         @unique
   name             String 
-  image            String
-  gender           Gender
   password         String
   role             Role
+  schema           String
  
 }
 enum Role {
   ADMIN
-  TRAINER
-  TRAINEE
+  TEACHER
+  STUDENT
 }
 
 enum Gender {

@@ -3,7 +3,7 @@ import { changeSchema, dbConnect, dbDisconnect } from "../../../utils/dbConnect"
 
 const getResumes = async (username: string) => {
   try {
-    const Client = await dbConnect();
+    const Client = await dbConnect(username);
     await changeSchema(username, Client);
     const result = await Client.query("SELECT * FROM resume;");
     return result.rows;
@@ -15,7 +15,7 @@ const getResumes = async (username: string) => {
 
 const getResumeById = async (username: string, id: string) => {
   try {
-    const Client = await dbConnect();
+    const Client = await dbConnect(username);
     await changeSchema(username, Client);
     const result = await Client.query("SELECT * FROM resume WHERE id = $1;", [id]);
 
@@ -31,7 +31,7 @@ const getResumeById = async (username: string, id: string) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createResume = async (username: string, resumeData: any) => {
-  const pgClient = await dbConnect();
+  const pgClient = await dbConnect(username);
 
   try {
     await changeSchema(username, pgClient);
@@ -54,7 +54,7 @@ const createResume = async (username: string, resumeData: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updateResume = async (username: string, id: string, resumeData: any) => {
   try {
-    const pgClient = await dbConnect();
+    const pgClient = await dbConnect(username);
     await changeSchema(username, pgClient);
     const updates = Object.entries(resumeData)
       // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -78,7 +78,7 @@ const updateResume = async (username: string, id: string, resumeData: any) => {
 
 const deleteResume = async (username: string, id: string) => {
   try {
-    const pgClient = await dbConnect();
+    const pgClient = await dbConnect(username);
     await changeSchema(username, pgClient);
     const result = await pgClient.query("DELETE FROM resume WHERE id = $1 RETURNING *;", [id]);
 

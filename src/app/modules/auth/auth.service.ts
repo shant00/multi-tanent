@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import config from '../../../config';
+import { ENUM_USER_ROLE } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { ILogInUser, IRefreshTokenResponse } from './auth.interface';
@@ -16,21 +17,22 @@ const loginUser = async (data: ILogInUser) => {
     throw new Error('Invalid credentials');
   }
   //create access token & refresh token
-  const { id, email: mail } = user
+  const { id, email: mail, role, schema } = user
   const accessToken = jwtHelpers.createToken(
-    { id, mail },
+    { id, mail, role, schema },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string,
   )
 
   const refreshToken = jwtHelpers.createToken(
-    { id, mail },
+    { id, mail, role, schema },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string,
   )
 
   return {
     id,
+    role: role as ENUM_USER_ROLE,
     accessToken,
     refreshToken,
   }
@@ -60,7 +62,9 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   const newAccessToken = jwtHelpers.createToken(
     {
       id: isUserExist.id,
+      role: isUserExist.role as ENUM_USER_ROLE,
       mail: isUserExist.email,
+      schema: isUserExist.schema
     },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string,

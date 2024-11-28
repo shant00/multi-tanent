@@ -2,6 +2,7 @@ import express from 'express';
 import { AuthRoutes } from '../modules/auth/auth.route';
 import { ResumeRoutes } from '../modules/resume/resume.route';
 import { SchemaRoutes } from '../modules/schema/schema.route';
+import { SchoolRoutes } from '../modules/school/school.route';
 import { UserRoutes } from '../modules/user/user.route';
 
 const router = express.Router();
@@ -23,6 +24,9 @@ const moduleRoutes = [
     path: '/resume',
     route: ResumeRoutes,
 
+  }, {
+    path: '/school',
+    route: SchoolRoutes,
   }
 ];
 
